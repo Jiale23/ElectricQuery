@@ -9,7 +9,7 @@ class ConfigManager:
     _config_path = 'config.yml'
 
     _default_config = {
-        'db_name': 'power_history.db',
+        'db_name': 'data/power_history.db',
         'enabled_senders': ['email'],
         'smtp': {
             'server': "smtp.163.com",

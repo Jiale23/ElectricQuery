@@ -1,0 +1,8 @@
+services:
+  power_checker:
+    build: .
+    volumes:
+      - ./config.yml:/app/config.yml:ro
+      - ./data:/app/data
+      - ./logs:/app/logs
+    restart: "no"

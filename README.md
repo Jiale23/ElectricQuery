@@ -1,4 +1,4 @@
-# ⚡ PowerNotifier 电量通知系统
+# ⚡ ElectricQuery 电量通知系统
 
 一个自动查询宿舍电量并通过多渠道发送提醒的 Python 工具。支持邮箱通知、企业微信机器人，记录历史电量并对比分析每日消耗📊。
 
@@ -46,6 +46,12 @@ python main.py
 ```
 
 ---
+
+4. **定时运行**
+
+```yaml
+0 8 * * * cd /script/ElectricQuery && /usr/bin/docker compose run --rm power_checker
+```
 
 ## 🧠 示例输出
 
