@@ -1,0 +1,14 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# VSCode settings
+.vscode/
+
+# Logs and database
+logs/
+*.log
+power_history.db
+
+# Config (user-specific)
+config.yml
