@@ -37,40 +37,24 @@ def save_power_data(remaining_power, date_str=None):
     finally:
         conn.close()
 
-def get_recent_three_days_consumption():
+def get_recent_power_logs(limit=3):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     try:
         cursor.execute('''
             SELECT date, remaining_power FROM power_log
             ORDER BY date DESC
-            LIMIT 3
-        ''')
-        rows = cursor.fetchall()
-        if len(rows) < 1:
-            logger.warning("暂无三天内数据")
-            return None
-
-        rows = sorted(rows, key=lambda x: x[0])
-        consumptions = []
-        for i in range(len(rows)):
-            curr_date, curr_power = rows[i]
-            consumption = None
-            if i > 0:
-                try:
-                    prev_power = float(rows[i-1][1])
-                    curr_power_float = float(curr_power)
-                    consumption = prev_power - curr_power_float
-                except Exception:
-                    consumption = None
-            consumptions.append({
-                'date': curr_date,
-                'remaining_power': curr_power,
-                'consumption_since_prev_day': consumption
-            })
-        return consumptions
+            LIMIT ?
+        ''', (limit,))
+        return cursor.fetchall()
     except Exception as e:
-        logger.error(f"查询最近三天电量消耗失败: {e}")
-        return None
+        logger.error(f"查询电量记录失败: {e}")
+        return []
     finally:
         conn.close()
+
+def get_latest_power():
+    logs = get_recent_power_logs(limit=1)
+    if logs:
+        return float(logs[0][1])
+    return None
