@@ -1,6 +1,7 @@
 services:
   power_checker:
     build: .
+    network_mode: host
     volumes:
       - ./config.yml:/app/config.yml:ro
       - ./data:/app/data
