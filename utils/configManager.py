@@ -10,6 +10,8 @@ class ConfigManager:
 
     _default_config = {
         'db_name': 'data/power_history.db',
+        'alert_threshold': 20,
+        'weekly_report_day': 0,
         'enabled_senders': ['email'],
         'smtp': {
             'server': "smtp.163.com",
@@ -20,6 +22,7 @@ class ConfigManager:
             'receiver_emails': ["awesome@163.com"]
         },
         'wechat': {
+            'mention_list': ["@all"],
             'webhook_url': "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxxxxxxxxxxxxxx"
         },
         'power_checker': {

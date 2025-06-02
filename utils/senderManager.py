@@ -12,9 +12,6 @@ from utils.configManager import ConfigManager
 
 logger = setup_logger()
 
-config = ConfigManager.get_config()
-mention_list = config.get('mention_list', [])  # 期望是列表，比如 ["13800138000", "zhangsan", "@all"]
-
 class BaseSender:
     def send(self, subject, body):
         raise NotImplementedError("子类必须实现 send 方法")
@@ -56,19 +53,19 @@ class EmailSender(BaseSender):
 class WeChatSender:
     def __init__(self, config):
         self.webhook_url = config.get('wechat', {}).get('webhook_url')
+        self.mention_list = config.get('wechat', {}).get('mention_list', [])
 
     def send(self, subject, body, image_path=None):
         if not self.webhook_url:
             logger.warning("未配置企业微信机器人 Webhook URL，跳过发送")
             return
-        
-        # 先发送文本
+
         content = f"【{subject}】\n{body}"
         text_data = {"msgtype": "text", "text": {"content": content}}
-        if mention_list:
-            # 分别过滤手机号和用户名
-            mobiles = [m for m in mention_list if m.isdigit() or (m.startswith("+") and m[1:].isdigit())]
-            users = [u for u in mention_list if not (u.isdigit() or (u.startswith("+") and u[1:].isdigit()))]
+
+        if self.mention_list:
+            mobiles = [m for m in self.mention_list if m.isdigit() or (m.startswith("+") and m[1:].isdigit())]
+            users = [u for u in self.mention_list if not (u.isdigit() or (u.startswith("+") and u[1:].isdigit()))]
 
             if mobiles:
                 text_data["text"]["mentioned_mobile_list"] = mobiles

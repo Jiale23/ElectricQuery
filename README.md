@@ -45,24 +45,39 @@ power_checker:
 python main.py
 ```
 
----
+4. **docker部署**
+```bash
+cd /ElectricQuery && docker compose build
+```
 
-4. **定时运行**
+5. **定时运行**
 
 ```yaml
-0 8 * * * cd /script/ElectricQuery && /usr/bin/docker compose run --rm power_checker
+0 8 * * * cd /ElectricQuery && /usr/bin/docker compose run --rm power_checker
 ```
+
+---
 
 ## 🧠 示例输出
 
 ```
-当前剩余电量为: 72.5 度
-
-📊 最近三天电量消耗：
-2025-05-30 剩余电量: 74.0，当天消耗: 1.5
-2025-05-31 剩余电量: 73.0，当天消耗: 1.0
-2025-06-01 剩余电量: 72.5，当天消耗: 0.5
+【【电量告警】剩余电量过低】
+当前剩余电量为 19.96 度，低于设定阈值 20 度，请及时充值。
 ```
+
+```
+📊 【每周电量报告】
+本周电量记录如下：
+----------------------------
+2025-05-27 | 剩余电量: 50.85 | 当天消耗: 暂无数据
+2025-05-28 | 剩余电量: 50.20 | 当天消耗: -0.65 度
+2025-05-29 | 剩余电量: 51.07 | 当天消耗: +0.87 度
+2025-05-30 | 剩余电量: 50.48 | 当天消耗: -0.59 度
+2025-05-31 | 剩余电量: 49.23 | 当天消耗: -1.25 度
+2025-06-01 | 剩余电量: 48.18 | 当天消耗: -1.05 度
+2025-06-02 | 剩余电量: 49.96 | 当天消耗: +1.78 度
+```
+![alt text](output/power_delta_report.png)
 
 ---
 
@@ -72,14 +87,23 @@ python main.py
 📁 ./
 ├── 📁 utils/                 # 工具类模块
 │   ├── configManager.py      # 配置加载与初始化
+│   ├── senderManager.py      # 通知发送模块（支持多方式）
 │   ├── dataManager.py        # 数据库管理（记录与查询电量）
+│   ├── analyzer.py           # 数据处理（电量差值计算）
+│   ├── chart.py              # 图标绘制（折线图绘制部分）
 │   └── logger.py             # 日志记录配置
+├── 📁 logs/                 # 日志文件夹
+├── 📁 data/                 # 数据文件夹
+│   └── power_history.db      # SQLite 数据库（自动创建）
+├── 📁 fonts/ 
+│   └── SourceHanSansSC-Regular.otf  # 字体文件
 ├── requestNum.py             # 电量查询主逻辑
-├── sender.py                 # 通知发送模块（支持多方式）
 ├── main.py                   # 主运行脚本，执行查询+通知
 ├── config.yml                # 配置文件
-├── power_history.db          # SQLite 数据库（自动创建）
-└── README.md                 # 项目说明文档
+├── docker-compose.yml        # Compose配置
+├── Dockerfile                # 镜像构建脚本
+├── requirements.txt          # 依赖文件
+└── README.md                 # 自述文件
 
 ```
 
